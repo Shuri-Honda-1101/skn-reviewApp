@@ -5,12 +5,16 @@ export default function Layout() {
     <>
       <h1>skn-review-appへようこそ</h1>
       <h2>
-        <Link href="/jumps/Login">
-          <a>ログイン</a>
-        </Link>
-        <Link href="/Signup">
-          <a>サインアップ</a>
-        </Link>
+        <div>
+          <Link href="/jumps/Login">
+            <a>ログイン</a>
+          </Link>
+        </div>
+        <div>
+          <Link href="/Signup">
+            <a>サインアップ</a>
+          </Link>
+        </div>
       </h2>
     </>
   );
