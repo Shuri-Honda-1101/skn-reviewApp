@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { firebase } from "../../config/firebase";
+import { firebase } from "../../../config/firebase";
 import { Button } from "antd";
 
 const Signup: React.FC<{}> = () => {
