@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { firebase } from "../../config/firebase";
+import { firebase } from "../../../config/firebase";
+import { Button } from "antd";
 
 const Signup: React.FC<{}> = () => {
   const [email, setEmail] = useState<string>("");
@@ -45,6 +46,7 @@ const Signup: React.FC<{}> = () => {
           />
         </div>
         <button type="submit">アカウント作成</button>
+        <Button type="primary">Button</Button>
       </form>
     </>
   );

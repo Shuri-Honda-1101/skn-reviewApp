@@ -11,7 +11,7 @@ export default function Layout() {
           </Link>
         </div>
         <div>
-          <Link href="/Signup">
+          <Link href="/jumps/Signup">
             <a>サインアップ</a>
           </Link>
         </div>
