@@ -5,7 +5,7 @@ const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: any): void => {
     e.preventDefault();
     firebase
       .auth()
