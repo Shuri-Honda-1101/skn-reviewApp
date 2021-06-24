@@ -45,7 +45,7 @@ const Signup: React.FC<{}> = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">アカウント作成</button>
+        <button type="submit"} >アカウント作成</button>
         <Button type="primary">Button</Button>
       </form>
     </>

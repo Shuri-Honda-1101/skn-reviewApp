@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { firebase } from "../../../config/firebase";
+import { Button } from "antd";
 
 const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  //メールアドレスでログイン
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     firebase
@@ -16,6 +18,21 @@ const Login: React.FC<{}> = () => {
       .catch((err) => {
         console.log(err);
         alert("ログイン失敗");
+      });
+  };
+
+  //Googleログイン
+  const onClickGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(() => {
+        alert("Googleでログインしました");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("googleでのログインに失敗しました");
       });
   };
 
@@ -44,8 +61,11 @@ const Login: React.FC<{}> = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">ログイン</button>
+        <button type="submit">メールアドレスでログイン</button>
       </form>
+      <Button type="primary" onClick={onClickGoogle}>
+        Googleで新規登録/ログイン
+      </Button>
     </>
   );
 };
