@@ -8,7 +8,9 @@ const Login: React.FC<{}> = () => {
   const [password, setPassword] = useState<string>("");
 
   //メールアドレスでログイン
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     const result = await firebase
       .auth()
@@ -24,7 +26,7 @@ const Login: React.FC<{}> = () => {
   };
 
   //Googleログイン
-  const onClickGoogle = async (): void => {
+  const onClickGoogle = async (): Promise<void> => {
     const provider = new firebase.auth.GoogleAuthProvider();
     const result = await firebase
       .auth()
@@ -40,7 +42,7 @@ const Login: React.FC<{}> = () => {
   };
 
   //Twitterログイン
-  const onClickTwitter = async () => {
+  const onClickTwitter = async (): Promise<void> => {
     const provider = new firebase.auth.TwitterAuthProvider();
     const result = await firebase
       .auth()
