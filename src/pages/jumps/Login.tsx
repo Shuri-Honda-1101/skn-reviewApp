@@ -39,6 +39,22 @@ const Login: React.FC<{}> = () => {
     alert(`googleログインが${result}しました`);
   };
 
+  //Twitterログイン
+  const onClickTwitter = async () => {
+    const provider = new firebase.auth.TwitterAuthProvider();
+    const result = await firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(() => {
+        return "成功";
+      })
+      .catch((error) => {
+        console.log(error);
+        return "失敗";
+      });
+    alert(`Twitterログインに${result}しました`);
+  };
+
   return (
     <>
       <h1>Loginページ</h1>
@@ -71,6 +87,11 @@ const Login: React.FC<{}> = () => {
       <div>
         <Button type="primary" onClick={onClickGoogle}>
           Googleで新規登録/ログイン
+        </Button>
+      </div>
+      <div>
+        <Button type="primary" onClick={onClickTwitter}>
+          Twitterで新規登録/ログイン
         </Button>
       </div>
       <div>
