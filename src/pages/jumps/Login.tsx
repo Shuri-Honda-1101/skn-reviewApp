@@ -8,33 +8,35 @@ const Login: React.FC<{}> = () => {
   const [password, setPassword] = useState<string>("");
 
   //メールアドレスでログイン
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    firebase
+    const result = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        alert("ログイン成功");
+        return "成功";
       })
       .catch((err) => {
         console.log(err);
-        alert("ログイン失敗");
+        return "失敗";
       });
+    alert(`ログイン処理が${result}しました`);
   };
 
   //Googleログイン
-  const onClickGoogle = (): void => {
+  const onClickGoogle = async (): void => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
+    const result = await firebase
       .auth()
       .signInWithPopup(provider)
       .then(() => {
-        alert("Googleでログインしました");
+        return "成功";
       })
       .catch((error) => {
         console.log(error);
-        alert("googleでのログインに失敗しました");
+        return "失敗";
       });
+    alert(`googleログインが${result}しました`);
   };
 
   return (
