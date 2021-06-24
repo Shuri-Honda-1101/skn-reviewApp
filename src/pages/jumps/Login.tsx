@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { firebase } from "../../../config/firebase";
 import { Button } from "antd";
+import Link from "next/Link";
 
 const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState<string>("");
@@ -22,7 +23,7 @@ const Login: React.FC<{}> = () => {
   };
 
   //Googleログイン
-  const onClickGoogle = () => {
+  const onClickGoogle = (): void => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase
       .auth()
@@ -39,33 +40,42 @@ const Login: React.FC<{}> = () => {
   return (
     <>
       <h1>Loginページ</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">メールアドレス: </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            placeholder="メールアドレス"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">パスワード: </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="パスワード"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">メールアドレスでログイン</button>
-      </form>
-      <Button type="primary" onClick={onClickGoogle}>
-        Googleで新規登録/ログイン
-      </Button>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email">メールアドレス: </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              placeholder="メールアドレス"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="password">パスワード: </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="パスワード"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit">メールアドレスでログイン</button>
+        </form>
+      </div>
+      <div>
+        <Button type="primary" onClick={onClickGoogle}>
+          Googleで新規登録/ログイン
+        </Button>
+      </div>
+      <div>
+        <Link href="/jumps/Signup">
+          <a>新規登録はこちらから</a>
+        </Link>
+      </div>
     </>
   );
 };
