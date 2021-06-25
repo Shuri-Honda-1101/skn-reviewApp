@@ -34,6 +34,7 @@ const ModalForgetPassword: React.FC<AppProps> = ({
           <button
             onClick={() => {
               setOpenModalForgetPassword(false);
+              setResetPasswordEmail("");
             }}
           >
             閉じる

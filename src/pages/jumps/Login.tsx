@@ -20,6 +20,7 @@ const Login: React.FC<{}> = () => {
       .auth()
       .sendPasswordResetEmail(resetPasswordEmail)
       .then(() => {
+        setResetPasswordEmail("");
         setOpenModalForgetPassword(false);
         return "入力されたメールアドレスにパスワード再設定のご案内をお送りしました";
       })
