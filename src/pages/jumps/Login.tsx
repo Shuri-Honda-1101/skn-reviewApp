@@ -2,10 +2,33 @@ import { useState } from "react";
 import { firebase } from "../../../config/firebase";
 import { Button } from "antd";
 import Link from "next/Link";
+import ModalForgetPassword from "../../components/ModalForgetPassword";
 
 const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [openModalForgetPassword, setOpenModalForgetPassword] =
+    useState<boolean>(false);
+  const [resetPasswordEmail, setResetPasswordEmail] = useState("");
+
+  //パスワード再設定
+  const onClickResetPasswordSubmit = async (
+    e: React.FormEvent<HTMLButtonElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    const result = await firebase
+      .auth()
+      .sendPasswordResetEmail(resetPasswordEmail)
+      .then(() => {
+        setOpenModalForgetPassword(false);
+        return "入力されたメールアドレスにパスワード再設定のご案内をお送りしました";
+      })
+      .catch(() => {
+        setResetPasswordEmail("");
+        return "存在しないメールアドレスです";
+      });
+    alert(result);
+  };
 
   //メールアドレスでログイン
   const handleSubmit = async (
@@ -59,6 +82,14 @@ const Login: React.FC<{}> = () => {
 
   return (
     <>
+      {openModalForgetPassword && (
+        <ModalForgetPassword
+          setOpenModalForgetPassword={setOpenModalForgetPassword}
+          resetPasswordEmail={resetPasswordEmail}
+          setResetPasswordEmail={setResetPasswordEmail}
+          onClickResetPasswordSubmit={onClickResetPasswordSubmit}
+        />
+      )}
       <h1>Loginページ</h1>
       <div>
         <form onSubmit={handleSubmit}>
@@ -85,6 +116,13 @@ const Login: React.FC<{}> = () => {
           </div>
           <button type="submit">メールアドレスでログイン</button>
         </form>
+        <button
+          onClick={(): void => {
+            setOpenModalForgetPassword(true);
+          }}
+        >
+          パスワードを忘れましたか？
+        </button>
       </div>
       <div>
         <Button type="primary" onClick={onClickGoogle}>
