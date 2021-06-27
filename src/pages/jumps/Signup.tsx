@@ -5,18 +5,24 @@ import { Button } from "antd";
 const Signup: React.FC<{}> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   const handleSubmit = (e: any): void => {
     e.preventDefault();
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
+      .then(({ user }: any) => {
         alert("アカウント作成成功");
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("アカウント作成失敗");
+        user
+          .updateProfile({ displayName: name })
+          .then(() => {
+            alert("ユーザーネームを更新しました");
+          })
+          .catch((err) => {
+            console.log(err);
+            alert("ユーザーネーム更新失敗");
+          });
       });
   };
 
@@ -24,6 +30,17 @@ const Signup: React.FC<{}> = () => {
     <>
       <h1>Signupページ</h1>
       <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">ユーザー名: </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={name}
+            placeholder="メールアドレス"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
         <div>
           <label htmlFor="email">メールアドレス: </label>
           <input
