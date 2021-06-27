@@ -1734,7 +1734,7 @@ find-up@^4.0.0:
 
 firebase@^8.6.8:
   version "8.6.8"
-  resolved "https://registry.npmjs.org/firebase/-/firebase-8.6.8.tgz"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-8.6.8.tgz#78b1ff57963736bcc50188ba5f38f3690320a5fc"
   integrity sha512-ez8pW8oMVUk/o8CRgi1LaZcOYMlshsQl0VpjIQWcOJxtRwjTYnFXDyyt1j2FMB6golMk8YUSeZ7UahnON3SseA==
   dependencies:
     "@firebase/analytics" "0.6.13"
