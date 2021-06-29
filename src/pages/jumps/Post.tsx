@@ -19,12 +19,13 @@ const Post: FC<PostProps> = () => {
       itemUrl: itemUrl,
       evaluation: evaluation,
       content: maintext,
+      user: user.displayName,
     })
   }
+  const user = firebase.auth().currentUser;
 
   const radio = (e: ChangeEvent<HTMLInputElement>) => {
     setEvaluation(e.target.value);
-
   } 
   return (
     <div>
