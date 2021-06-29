@@ -11,6 +11,7 @@ const Post: FC<PostProps> = () => {
   const [itemUrl, setItemUrl] = useState<string>('');
   const [evaluation, setEvaluation] = useState<string>('');
   const [maintext, setMainText] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
 
   const add = () => {
     db.collection('review').add({
@@ -19,10 +20,11 @@ const Post: FC<PostProps> = () => {
       itemUrl: itemUrl,
       evaluation: evaluation,
       content: maintext,
-      user: user.displayName,
+      user: firebase.auth().currentUser.displayName,
     })
+    setUserName(firebase.auth().currentUser.displayName)
+    alert("投稿しました。");
   }
-  const user = firebase.auth().currentUser;
 
   const radio = (e: ChangeEvent<HTMLInputElement>) => {
     setEvaluation(e.target.value);
