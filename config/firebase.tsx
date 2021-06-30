@@ -12,7 +12,9 @@ const firebaseConfig = {
   measurementId: "G-GX1V53SPEX",
 };
 
-firebase.initializeApp(firebaseConfig);
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const auth = firebase.auth();
 const db = firebase.firestore();
