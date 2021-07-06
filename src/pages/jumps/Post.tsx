@@ -21,6 +21,8 @@ const Post: FC<PostProps> = () => {
         evaluation: evaluation,
         content: maintext,
         user: firebase.auth().currentUser.displayName,
+        uid: firebase.auth().currentUser.uid,
+        time: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => {
         return "投稿しました";
@@ -39,7 +41,11 @@ const Post: FC<PostProps> = () => {
       <h1>レビューを投稿する</h1>
       <div>
         <p>＞画像を追加</p>
-        <input type="file" onChange={(e) => setfile(e.target.value)} />
+        <input
+          type="file"
+          accept=".jpeg, .jpg, .png, .gif"
+          onChange={(e) => setfile(e.target.value)}
+        />
       </div>
       <div>
         <p>＞商品を登録</p>
