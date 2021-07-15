@@ -1,21 +1,28 @@
 import { FC, ChangeEvent, useState } from "react";
-import { firebase, db } from "../../../config/firebase";
+import { firebase, db, storage } from "../../../config/firebase";
 
 type PostProps = {};
 
 const Post: FC<PostProps> = () => {
-  const [file, setfile] = useState<string>("");
+  const [files, setFiles] = useState<any[]>([]);
   const [item, setItem] = useState<string>("");
   const [itemUrl, setItemUrl] = useState<string>("");
   const [evaluation, setEvaluation] = useState<string>("");
   const [maintext, setMainText] = useState<string>("");
-  const [userName, setUserName] = useState<string>("");
+  const handleImage = (event) => {
+    const FileList: FileList = event.target.files;
+    const files = Array.from(FileList);
+    const images = files.map((file) => {
+      return file;
+    });
+    setFiles(images);
+  };
 
   const add = async (): Promise<void> => {
     const addprocess = await db
       .collection("review")
       .add({
-        file: file,
+        // file: file,
         item: item,
         itemUrl: itemUrl,
         evaluation: evaluation,
@@ -30,12 +37,40 @@ const Post: FC<PostProps> = () => {
       .catch(() => {
         return "投稿に失敗しました";
       });
+    statementUpload;
+    for (let i = 0; i < files.length; i++) {
+      const storageRef = storage.ref().child(`images/${files[i].name}`);
+      storageRef.put(files[i]);
+    }
     alert(addprocess);
+  };
+
+  const statementUpload = async () => {
+    const storageRef = storage.ref().child(`test_folder_name/${files[0].name}`);
+    const upload = storageRef.put(files[0]); // await で書けない
+    upload.on(
+      "state_changed",
+      (snapshot) => {
+        /* 進行中のcallback */
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("snapshot.state: " + snapshot.state);
+        console.log(progress + "%...");
+      },
+      (error) => {
+        /* 失敗時のcallback */
+        console.log("アップロードに失敗しました", error);
+      },
+      () => {
+        /* 完了時のcallback */
+        console.log("アップロードが完了しました!!");
+      }
+    );
   };
 
   const radio = (e: ChangeEvent<HTMLInputElement>) => {
     setEvaluation(e.target.value);
   };
+
   return (
     <div>
       <h1>レビューを投稿する</h1>
@@ -44,7 +79,8 @@ const Post: FC<PostProps> = () => {
         <input
           type="file"
           accept=".jpeg, .jpg, .png, .gif"
-          onChange={(e) => setfile(e.target.value)}
+          multiple
+          onChange={handleImage}
         />
       </div>
       <div>
