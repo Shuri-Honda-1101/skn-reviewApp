@@ -37,7 +37,10 @@ const Post: FC<PostProps> = () => {
       .catch(() => {
         return "投稿に失敗しました";
       });
-    statementUpload;
+    if (files.length > 4) {
+      alert("画像のアップロードは3枚までです。");
+      return;
+    }
     for (let i = 0; i < files.length; i++) {
       const storageRef = storage.ref().child(`images/${files[i].name}`);
       storageRef.put(files[i]);
@@ -45,27 +48,27 @@ const Post: FC<PostProps> = () => {
     alert(addprocess);
   };
 
-  const statementUpload = async () => {
-    const storageRef = storage.ref().child(`test_folder_name/${files[0].name}`);
-    const upload = storageRef.put(files[0]); // await で書けない
-    upload.on(
-      "state_changed",
-      (snapshot) => {
-        /* 進行中のcallback */
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("snapshot.state: " + snapshot.state);
-        console.log(progress + "%...");
-      },
-      (error) => {
-        /* 失敗時のcallback */
-        console.log("アップロードに失敗しました", error);
-      },
-      () => {
-        /* 完了時のcallback */
-        console.log("アップロードが完了しました!!");
-      }
-    );
-  };
+  // const statementUpload = async () => {
+  //   const storageRef = storage.ref().child(`test_folder_name/${files[0].name}`);
+  //   const upload = storageRef.put(files[0]); // await で書けない
+  //   upload.on(
+  //     "state_changed",
+  //     (snapshot) => {
+  //       /* 進行中のcallback */
+  //       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       console.log("snapshot.state: " + snapshot.state);
+  //       console.log(progress + "%...");
+  //     },
+  //     (error) => {
+  //       /* 失敗時のcallback */
+  //       console.log("アップロードに失敗しました", error);
+  //     },
+  //     () => {
+  //       /* 完了時のcallback */
+  //       console.log("アップロードが完了しました!!");
+  //     }
+  //   );
+  // };
 
   const radio = (e: ChangeEvent<HTMLInputElement>) => {
     setEvaluation(e.target.value);
