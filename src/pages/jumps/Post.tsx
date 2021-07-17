@@ -9,6 +9,7 @@ const Post: FC<PostProps> = () => {
   const [itemUrl, setItemUrl] = useState<string>("");
   const [evaluation, setEvaluation] = useState<string>("");
   const [maintext, setMainText] = useState<string>("");
+  const [imagesUrl, setImagesUrl] = useState<string[]>([]);
   const handleImage = (event) => {
     const FileList: FileList = event.target.files;
     const files = Array.from(FileList);
@@ -22,7 +23,6 @@ const Post: FC<PostProps> = () => {
     const addprocess = await db
       .collection("review")
       .add({
-        // file: file,
         item: item,
         itemUrl: itemUrl,
         evaluation: evaluation,
@@ -30,6 +30,8 @@ const Post: FC<PostProps> = () => {
         user: firebase.auth().currentUser.displayName,
         uid: firebase.auth().currentUser.uid,
         time: firebase.firestore.FieldValue.serverTimestamp(),
+        photoURL: firebase.auth().currentUser.photoURL,
+        imagesURL: "",
       })
       .then(() => {
         return "投稿しました";
@@ -43,32 +45,21 @@ const Post: FC<PostProps> = () => {
     }
     for (let i = 0; i < files.length; i++) {
       const storageRef = storage.ref().child(`images/${files[i].name}`);
-      storageRef.put(files[i]);
+      storageRef.put(files[i]).then(() => {
+        const storageRefGet = storage.ref().child(`images/${files[i].name}`);
+        const url = storageRefGet.getDownloadURL();
+        setImagesUrl([...imagesUrl, url]);
+      }).catch(() => {
+        console.log('error')
+      })
     }
     alert(addprocess);
-  };
+  }
+        // db.collection('review').doc('aaED1LaQMu0szp4Jsyq6').update({
+        //   imagesURL: imagesUrl,
+        // })
 
-  // const statementUpload = async () => {
-  //   const storageRef = storage.ref().child(`test_folder_name/${files[0].name}`);
-  //   const upload = storageRef.put(files[0]); // await で書けない
-  //   upload.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       /* 進行中のcallback */
-  //       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       console.log("snapshot.state: " + snapshot.state);
-  //       console.log(progress + "%...");
-  //     },
-  //     (error) => {
-  //       /* 失敗時のcallback */
-  //       console.log("アップロードに失敗しました", error);
-  //     },
-  //     () => {
-  //       /* 完了時のcallback */
-  //       console.log("アップロードが完了しました!!");
-  //     }
-  //   );
-  // };
+        console.log(imagesUrl)
 
   const radio = (e: ChangeEvent<HTMLInputElement>) => {
     setEvaluation(e.target.value);
