@@ -9,7 +9,7 @@ const Post: FC<PostProps> = () => {
   const [itemUrl, setItemUrl] = useState<string>("");
   const [evaluation, setEvaluation] = useState<string>("");
   const [maintext, setMainText] = useState<string>("");
-  const [imagesUrl, setImagesUrl] = useState<string[]>([]);
+  const [imagesUrl, setImagesUrl] = useState<Promise<any>[]>([]);
   const handleImage = (event) => {
     const FileList: FileList = event.target.files;
     const files = Array.from(FileList);
@@ -19,47 +19,61 @@ const Post: FC<PostProps> = () => {
     setFiles(images);
   };
 
-  const add = async (): Promise<void> => {
-    const addprocess = await db
-      .collection("review")
-      .add({
-        item: item,
-        itemUrl: itemUrl,
-        evaluation: evaluation,
-        content: maintext,
-        user: firebase.auth().currentUser.displayName,
-        uid: firebase.auth().currentUser.uid,
-        time: firebase.firestore.FieldValue.serverTimestamp(),
-        photoURL: firebase.auth().currentUser.photoURL,
-        imagesURL: "",
-      })
-      .then(() => {
-        return "投稿しました";
-      })
-      .catch(() => {
-        return "投稿に失敗しました";
-      });
-    if (files.length > 4) {
-      alert("画像のアップロードは3枚までです。");
-      return;
-    }
-    for (let i = 0; i < files.length; i++) {
-      const storageRef = storage.ref().child(`images/${files[i].name}`);
-      storageRef.put(files[i]).then(() => {
-        const storageRefGet = storage.ref().child(`images/${files[i].name}`);
-        const url = storageRefGet.getDownloadURL();
-        setImagesUrl([...imagesUrl, url]);
-      }).catch(() => {
-        console.log('error')
-      })
-    }
-    alert(addprocess);
-  }
-        // db.collection('review').doc('aaED1LaQMu0szp4Jsyq6').update({
-        //   imagesURL: imagesUrl,
-        // })
+  const add = () => {
+    const imagesadd = async () => {
+      for (let i = 0; i < files.length; i++) {
+        const storageRef = storage.ref().child(`images/${files[i].name}`);
+        storageRef
+          .put(files[i])
+          .then(() => {
+            storageRef.getDownloadURL().then((url) => {
+              setImagesUrl([...imagesUrl, url]);
+              // db.collection("review")
+              //   .doc(id)
+              //   .update({
+              //     imagesURL: [...imagesUrl, url],
+              //   });
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    };
+    imagesadd().then(() => {
+      console.log(imagesUrl);
 
-        console.log(imagesUrl)
+      const addprocess = db
+        .collection("review")
+        .add({
+          item: item,
+          itemUrl: itemUrl,
+          evaluation: evaluation,
+          content: maintext,
+          user: firebase.auth().currentUser.displayName,
+          uid: firebase.auth().currentUser.uid,
+          time: firebase.firestore.FieldValue.serverTimestamp(),
+          photoURL: firebase.auth().currentUser.photoURL,
+          imagesURL: imagesUrl,
+        })
+        .then(() => {
+          return "投稿しました";
+        })
+        .catch(() => {
+          return "投稿に失敗しました";
+        });
+      alert(addprocess);
+      if (files.length > 4) {
+        alert("画像のアップロードは3枚までです。");
+        return;
+      }
+    });
+  };
+  // db.collection("review").doc("aaED1LaQMu0szp4Jsyq6").update({
+  //   imagesURL: imagesUrl,
+  // });
+
+  // console.log(imagesUrl);
 
   const radio = (e: ChangeEvent<HTMLInputElement>) => {
     setEvaluation(e.target.value);
