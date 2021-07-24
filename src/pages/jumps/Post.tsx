@@ -26,7 +26,6 @@ const Post: FC<PostProps> = () => {
       const image = await storageRef.getDownloadURL();
       imgUrl.push(image);
     }
-    console.log(imgUrl);
     const addprocess = await db
       .collection("review")
       .add({
